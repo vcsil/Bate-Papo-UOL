@@ -1,12 +1,150 @@
 <!DOCTYPE html>
 <html lang="br-pt">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&amp;display=swap"
+        rel="stylesheet" />
+
+    <link rel="SHORTCUT ICON" href="https://bp.imguol.com/favico.ico">
+
+    <title>O Chat online mais famoso do Brasil | Bate Papo UOL</title>
 </head>
+
 <body>
-    
+    <header>
+        <img src="midia\logo1.png" alt="Bate-papo do Uol">
+        <ion-icon name="people"></ion-icon>
+    </header>
+
+    <main>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:21:45)</span>
+            <span class="name">João</span>
+            <span class="action">entra na sala...</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:28)</span>
+            <span class="name">João <p>para</p> Todos:</span>
+            <span class="mensagem">Bom dia</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:39)</span>
+            <span class="name">Maria <p>para</p> João:</span>
+            <span class="mensagem">Oi João :)</span>
+        </div>
+        <div class="boxMensagem reservado">
+            <span class="time">(09:22:48)</span>
+            <span class="name">João <p>reservadamente para</p> Maria:</span>
+            <span class="mensagem">Oi gatinha quer tc?</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:22:58)</span>
+            <span class="name">Maria</span>
+            <span class="mensagem">sai da sala...</span>
+        </div>
+
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:21:45)</span>
+            <span class="name">João</span>
+            <span class="action">entra na sala...</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:28)</span>
+            <span class="name">João <p>para</p> Todos:</span>
+            <span class="mensagem">Bom dia</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:39)</span>
+            <span class="name">Maria <p>para</p> João:</span>
+            <span class="mensagem">Oi João :)</span>
+        </div>
+        <div class="boxMensagem reservado">
+            <span class="time">(09:22:48)</span>
+            <span class="name">João <p>reservadamente para</p> Maria:</span>
+            <span class="mensagem">Oi gatinha quer tc?</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:22:58)</span>
+            <span class="name">Maria</span>
+            <span class="mensagem">sai da sala...</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:21:45)</span>
+            <span class="name">João</span>
+            <span class="action">entra na sala...</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:28)</span>
+            <span class="name">João <p>para</p> Todos:</span>
+            <span class="mensagem">Bom dia</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:39)</span>
+            <span class="name">Maria <p>para</p> João:</span>
+            <span class="mensagem">Oi João :)</span>
+        </div>
+        <div class="boxMensagem reservado">
+            <span class="time">(09:22:48)</span>
+            <span class="name">João <p>reservadamente para</p> Maria:</span>
+            <span class="mensagem">Oi gatinha quer tc?</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:22:58)</span>
+            <span class="name">Maria</span>
+            <span class="mensagem">sai da sala...</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:21:45)</span>
+            <span class="name">João</span>
+            <span class="action">entra na sala...</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:28)</span>
+            <span class="name">João <p>para</p> Todos:</span>
+            <span class="mensagem">Bom dia</span>
+        </div>
+        <div class="boxMensagem">
+            <span class="time">(09:22:39)</span>
+            <span class="name">Maria <p>para</p> João:</span>
+            <span class="mensagem">Oi João :)</span>
+        </div>
+        <div class="boxMensagem reservado">
+            <span class="time">(09:22:48)</span>
+            <span class="name">João <p>reservadamente para</p> Maria:</span>
+            <span class="mensagem">Oi gatinha quer tc?</span>
+        </div>
+        <div class="boxMensagem entra_sai">
+            <span class="time">(09:22:58)</span>
+            <span class="name">Maria</span>
+            <span class="mensagem">sai da sala...</span>
+        </div>
+    </main>
+
+    <footer>
+        <div class="boxEscreverMensagem">
+            <div class="espacoParaEscrever">
+                <div class="textoSuporte">Escreva aqui...</div>
+                <div class="textoDoUsuario" title="Escreva aqui..." contenteditable="true" spellcheck="true"
+                    oninput="removeTextoSuporte(this)"></div>
+            </div>
+        </div>
+        <ion-icon name="paper-plane-outline"></ion-icon>
+    </footer>
+
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+
+    <script src="script.js"></script>
 </body>
+
 </html>
