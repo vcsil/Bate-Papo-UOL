@@ -27,7 +27,7 @@
         </div>
         <div class="objInteraveis">
             <div class="inputs">
-                <input type="text" placeholder="Digite seu nome" dir="ltr">
+                <input type="text" placeholder="Digite seu nome" dir="ltr" onkeydown="enviarComEnter(event, getName)">
                 <div class="botao">
                     <button onclick="getName()">Entrar</button>
                 </div>
@@ -47,10 +47,10 @@
             <div class="espacoParaEscrever">
                 <div class="textoSuporte">Escreva aqui...</div>
                 <div class="textoDoUsuario" title="Escreva aqui..." contenteditable="true" spellcheck="true"
-                    oninput="removeTextoSuporte(this)"></div>
+                    oninput="removeTextoSuporte(this)" onkeydown="enviarComEnter(event, enviarMensagem)"></div>
             </div>
         </div>
-        <ion-icon name="paper-plane-outline"></ion-icon>
+        <ion-icon name="paper-plane-outline" onclick="enviarMensagem()"></ion-icon>
     </footer>
 
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>

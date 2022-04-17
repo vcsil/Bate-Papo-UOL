@@ -3,9 +3,11 @@
 const SEGUNDO_1 = 1000 // 1000 ms == 1 segundo
 let NOME_USUARIO;
 
-let ultimaMensagem;
-let cont = 0;
-let cont2 = 0;
+let idIntervalAtualizaMensagens;
+let idManterConectado;
+let apertouBotaoEntrar = 0;
+let destinatarioMensagemUsuario = "Todos"
+let tipoMensagemUsuario = "message"
 
 let ver;
 let ver1;
@@ -37,15 +39,19 @@ function fechaAviso() {
 
 // Pegando o nome na página inicial
 function getName() {
-    NOME_USUARIO = document.querySelector("input").value;
-    if (NOME_USUARIO === "") {
-        const textoErro = "Ta maluco? Escreve um nome aí.<br>Por favor.......";
-        callErro(textoErro)
-    } else {
-        const objComNome = { "name": NOME_USUARIO }
-        const requesEnviandoNome = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", objComNome);
-        requesEnviandoNome.then(liberaChat);
-        requesEnviandoNome.catch(falhaLogin);
+    if (apertouBotaoEntrar === 0) {
+        apertouBotaoEntrar++
+        NOME_USUARIO = document.querySelector("input").value;
+        if (NOME_USUARIO === "") {
+            const textoErro = "Ta maluco? Escreve um nome aí.<br>Por favor.......";
+            apertouBotaoEntrar = 0;
+            callErro(textoErro)
+        } else {
+            const objComNome = { "name": NOME_USUARIO }
+            const requesEnviandoNome = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", objComNome);
+            requesEnviandoNome.then(liberaChat);
+            requesEnviandoNome.catch(falhaLogin);
+        }
     }
 }
 function liberaChat() {
@@ -67,10 +73,12 @@ function liberaChat() {
                        </div>
                         <div class="entrando">Entrando...</div>`
     // CHAMANDO AS MENSAGENS
-    //atualizaMensagens()
-    //setInterval(atualizaMensagens, SEGUNDO_1 * 2.5);
+    atualizaMensagens()
+    idIntervalAtualizaMensagens = setInterval(atualizaMensagens, SEGUNDO_1 * 2.5);
+    idManterConectado = setInterval(manterConectado, SEGUNDO_1 * 4.7);
 }
 function falhaLogin(erro) {
+    apertouBotaoEntrar = 0;
     if (erro.response.status === 400) {
         const textoErro = `O nome "${NOME_USUARIO}" já está em uso. Tente novamente com outro nome. 😃`
         callErro(textoErro)
@@ -99,7 +107,6 @@ function buscaMensagemServidor(sucesso, falha) {
     promiseBuscaMensagemServidor.catch(falha);
 }
 function encontrouMensagemServidor(arrayDeObjetos) { // Função que executa quando não ocorre falha
-    console.log("Vem vendo")
     arrayDeObjetos.data.forEach(inserirMensagemTela);
     document.querySelector(".pagInicial").classList.add("hidden");
 }
@@ -141,7 +148,7 @@ function adicionarMsgStatus(objetoComValores) {
 function adicionarMsgPrivada(objetoComValores) {
     if (NOME_USUARIO === objetoComValores['to']) {
         document.querySelector("main")
-            .innerHTML +=  `<div class="message private_message">
+            .innerHTML += `<div class="message private_message">
                                 <span class="time">${objetoComValores['time']}</span>
                                 <span class="name">${objetoComValores['from']}<p> reservadamente para </p>${objetoComValores['to']}:</span>
                                 <span class="mensagem">${objetoComValores['text']}</span>
@@ -162,12 +169,61 @@ function scrollandoParaUltimaMensagem() {
 }
 
 function atualizaMensagens() {
-    console.log("troca")
     document.querySelector("main").innerHTML = "";
     buscaMensagemServidor(encontrouMensagemServidor, falhaMensagemServidor);
     setTimeout(scrollandoParaUltimaMensagem, SEGUNDO_1 * 0.5);
 }
 
+// Função para avisar ao servidor que o usuário está conectado
+function manterConectado() {
+    const objComNome = { "name": NOME_USUARIO }
+    const promiseManterConectado = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", objComNome)
+    promiseManterConectado.then(sucessoManterConectado);
+    promiseManterConectado.catch(falhaManterConectado);
+}
+function sucessoManterConectado() {
+    return;
+}
+function falhaManterConectado(erro) {
+    const textoErro = `Falhou ao manter conectado.<br>Erro: ${erro.status}`
+    callErro(textoErro)
+    clearInterval(idIntervalAtualizaMensagens)
+    clearInterval(idManterConectado)
+}
 
+let txt;
 
+function enviarMensagem() {
+    const textoDoUsuario = document.querySelector(".textoDoUsuario").innerHTML
+    if (textoDoUsuario === "" || textoDoUsuario === "<div><br></div><div><br></div>") {
+        document.querySelector(".textoDoUsuario").innerHTML = "";
+        return;
+    }
+    const objDaMensagem = {
+        "from": NOME_USUARIO,   "to"  : destinatarioMensagemUsuario,
+        "text": textoDoUsuario, "type": tipoMensagemUsuario
+    }
+    const promiseEnviarMensagem = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", objDaMensagem)
+    promiseEnviarMensagem.then(sucessoEnviarMensagem);
+    promiseEnviarMensagem.catch(falhaEnviarMensagem);
+}
+function sucessoEnviarMensagem() {
+    const textoDoUsuario = document.querySelector(".textoDoUsuario")
+    textoDoUsuario.innerHTML = "";
+    removeTextoSuporte(textoDoUsuario)
+    atualizaMensagens()
+}
+function falhaEnviarMensagem(erro) {
+    const textoErro = `Falhou ao enviar mensagem.<br>Você foi desconectado e a página será reiniciada.<br>Erro: ${erro.status}`
+    callErro(textoErro)
+    setTimeout(reiniciaPag, SEGUNDO_1*5)
+}
+
+// Função para enviar mensagens com enter
+function enviarComEnter(tecla, funcao) {
+    const teclaPressionada = tecla.key;
+    if (teclaPressionada === "Enter") {
+        funcao()
+    }
+}
 
