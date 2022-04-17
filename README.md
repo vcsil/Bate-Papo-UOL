@@ -3,6 +3,7 @@
 ### Bug's
 * Quando cola texto no lugar de escrever muda a fonte e tudo mais
 * Ajeitar o horário
+* Melhorar a atualização das mensagens
 
 ### Bug's resolvidos
 * Corrigir a quebra de nomes e textos muitos grandes.
