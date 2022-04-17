@@ -165,7 +165,7 @@ function adicionaMsg(objetoComValores) {
 }
 
 function scrollandoParaUltimaMensagem() {
-    document.querySelectorAll(".message")[99].scrollIntoView(true)
+    document.querySelectorAll(".message")[document.querySelectorAll(".message").length-1].scrollIntoView(true)
 }
 
 function atualizaMensagens() {
@@ -200,7 +200,7 @@ function enviarMensagem() {
         return;
     }
     const objDaMensagem = {
-        "from": NOME_USUARIO,   "to"  : destinatarioMensagemUsuario,
+        "from": NOME_USUARIO, "to": destinatarioMensagemUsuario,
         "text": textoDoUsuario, "type": tipoMensagemUsuario
     }
     const promiseEnviarMensagem = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", objDaMensagem)
@@ -216,7 +216,7 @@ function sucessoEnviarMensagem() {
 function falhaEnviarMensagem(erro) {
     const textoErro = `Falhou ao enviar mensagem.<br>Você foi desconectado e a página será reiniciada.<br>Erro: ${erro.status}`
     callErro(textoErro)
-    setTimeout(reiniciaPag, SEGUNDO_1*5)
+    setTimeout(reiniciaPag, SEGUNDO_1 * 5)
 }
 
 // Função para enviar mensagens com enter
