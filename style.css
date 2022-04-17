@@ -76,6 +76,10 @@ footer ion-icon {
     align-items: center;
 }
 
+.boxMensagem > span {
+    word-break: break-all;
+}
+
 .time {
     color: #b0b0b0;
 }
@@ -86,7 +90,7 @@ footer ion-icon {
     margin: 0 12px;
 }
 
-.entra_sai {
+.status {
     background-color: #DCDCDC;
 }
 
@@ -124,6 +128,7 @@ footer ion-icon {
     position: absolute;
     margin-left: 4px;
     font-style: italic;
+    color: lightgray;
 }
 
 .textoDoUsuario {
