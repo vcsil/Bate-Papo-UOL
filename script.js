@@ -2,17 +2,15 @@
 
 const SEGUNDO_1 = 1000 // 1000 ms == 1 segundo
 let NOME_USUARIO;
+let TODAS_MENSAGENS = "" // Variável para receber o HTML com todas a mensagens
+
 
 let idIntervalAtualizaMensagens;
 let idManterConectado;
 let apertouBotaoEntrar = 0;
 let destinatarioMensagemUsuario = "Todos"
 let tipoMensagemUsuario = "message"
-
-let ver;
-let ver1;
-let ver2;
-let ver3;
+let atualizacoesPagina = 0;
 
 // Função que reinicia a página
 function reiniciaPag() {
@@ -109,6 +107,7 @@ function buscaMensagemServidor(sucesso, falha) {
 function encontrouMensagemServidor(arrayDeObjetos) { // Função que executa quando não ocorre falha
     arrayDeObjetos.data.forEach(inserirMensagemTela);
     document.querySelector(".pagInicial").classList.add("hidden");
+    document.querySelector("main").innerHTML = TODAS_MENSAGENS//"";
 }
 function falhaMensagemServidor(erro) {  // Função que executa quando ocorre falha ao requisitar mensagem
     const textoErro = `FALHOU CHEFE ${erro.status}<br>Espera um pouco`;
@@ -128,7 +127,7 @@ function inserirMensagemTela(objetoComValores) {
     } else if (type === "private_message") {
         adicionarMsgPrivada(objetoComValores);
     } else if (type === "message") {
-        adicionaMsg(objetoComValores);
+        adicionarMsg(objetoComValores);
     } else {
         const resp = prompt("Aconteceu algum erro. Deseja reiniciar a página? Sim / Não");
         if (resp[0] === 's') {
@@ -138,40 +137,47 @@ function inserirMensagemTela(objetoComValores) {
 }
 
 function adicionarMsgStatus(objetoComValores) {
-    document.querySelector("main")
-        .innerHTML += `<div class="message status">
-                       <span class="time">${objetoComValores['time']}</span>
-                       <span class="name">${objetoComValores['from']}</span>
-                       <span class="mensagem">${objetoComValores['text']}</span>
-                       </div>`
+    //document.querySelector("main").innerHTML += 
+    TODAS_MENSAGENS += `
+        <div class="message status">
+            <span class="time">${arrumaHora(objetoComValores['time'])}</span>
+            <span class="name">${objetoComValores['from']}</span>
+            <span class="mensagem">${objetoComValores['text']}</span>
+        </div>`
 }
 function adicionarMsgPrivada(objetoComValores) {
-    if (NOME_USUARIO === objetoComValores['to']) {
-        document.querySelector("main")
-            .innerHTML += `<div class="message private_message">
-                                <span class="time">${objetoComValores['time']}</span>
-                                <span class="name">${objetoComValores['from']}<p> reservadamente para </p>${objetoComValores['to']}:</span>
-                                <span class="mensagem">${objetoComValores['text']}</span>
-                            </div>`
+    if (NOME_USUARIO === objetoComValores['to'] || objetoComValores['from'] === NOME_USUARIO || objetoComValores['from'] === "Todos") {
+        //document.querySelector("main").innerHTML += 
+        TODAS_MENSAGENS += `
+        <div class="message private_message">
+            <span class="time">${arrumaHora(objetoComValores['time'])}</span>
+            <span class="name">${objetoComValores['from']}<p> reservadamente para </p>${objetoComValores['to']}:</span>
+            <span class="mensagem">${objetoComValores['text']}</span>
+        </div>`
     }
 }
-function adicionaMsg(objetoComValores) {
-    document.querySelector("main")
-        .innerHTML += `<div class="message">
-                       <span class="time">${objetoComValores['time']}</span>
-                       <span class="name">${objetoComValores['from']}<p> para </p>${objetoComValores['to']}:</span>
-                       <span class="mensagem">${objetoComValores['text']}</span>
-                       </div>`
+function adicionarMsg(objetoComValores) {
+    //document.querySelector("main").innerHTML += 
+    TODAS_MENSAGENS += `
+    <div class="message">
+        <span class="time">${arrumaHora(objetoComValores['time'])}</span>
+        <span class="name">${objetoComValores['from']}<p> para </p>${objetoComValores['to']}:</span>
+        <span class="mensagem">${objetoComValores['text']}</span>
+    </div>`
 }
 
 function scrollandoParaUltimaMensagem() {
-    document.querySelectorAll(".message")[document.querySelectorAll(".message").length-1].scrollIntoView(true)
+    document.querySelectorAll(".message")[document.querySelectorAll(".message").length - 1].scrollIntoView(true)
 }
 
+// Função para ficar atualizando as mensagens 
 function atualizaMensagens() {
-    document.querySelector("main").innerHTML = "";
+    TODAS_MENSAGENS = ""
     buscaMensagemServidor(encontrouMensagemServidor, falhaMensagemServidor);
+    if (atualizacoesPagina === 0) {
     setTimeout(scrollandoParaUltimaMensagem, SEGUNDO_1 * 0.5);
+    atualizacoesPagina++
+    }
 }
 
 // Função para avisar ao servidor que o usuário está conectado
@@ -191,8 +197,7 @@ function falhaManterConectado(erro) {
     clearInterval(idManterConectado)
 }
 
-let txt;
-
+// FUnção para enviar a mensagem que está na caixa de texto
 function enviarMensagem() {
     const textoDoUsuario = document.querySelector(".textoDoUsuario").innerHTML
     if (textoDoUsuario === "" || textoDoUsuario === "<div><br></div><div><br></div>") {
@@ -227,3 +232,10 @@ function enviarComEnter(tecla, funcao) {
     }
 }
 
+// Função para concertar o horário - A hora está 9 horas atrasada
+function arrumaHora(time) {
+    hour = Number(time.slice(0,2));
+    horaCorreta = String((hour+9)%12);
+    horaFormatada = "0" + horaCorreta
+    return horaFormatada.slice(1)+time.slice(2)
+}
